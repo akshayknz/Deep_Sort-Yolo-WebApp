@@ -28,6 +28,9 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 </script>
+<style>
+  body{background-color: blue;}
+</style>
 <body>
     <div id="token"></div>
     <div id="msg"></div>
@@ -42,10 +45,10 @@
         // Initialize Firebase
         // TODO: Replace with your project's customized code snippet
         var config = {
-            apiKey: "<API_KEY>",
-            authDomain: "<PROJECT_ID>.firebaseapp.com",
-            databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
-            storageBucket: "<BUCKET>.appspot.com",
+            apiKey: "AIzaSyAkohDEqaC8qAyldVV3P-sBdaLPHWWpO2c",
+            authDomain: "s8project-test.firebaseapp.com",
+            databaseURL: "https://s8project-test.firebaseio.com",
+            storageBucket: "s8project-test.appspot.com",
             messagingSenderId: "272062630249",
         };
         firebase.initializeApp(config);
@@ -97,3 +100,11 @@
     <body>
 
 </html>
+
+
+<!--
+
+  curl -X POST -H "Authorization: key=AAAAP1gySWk:APA91bEJogPOykWMPEc4hoFer2QXo0uOijVODd2AHrb0qHsIWFRLAFGEDw-YZfEVi0oC9G_zh2j2dZ4RIvMyJi-cf3kvo2gZMRHN8PFvYDMwzAFVk4qlLmo5NyQNXhZNvzlqP7w6pG20" ^
+   -H "Content-Type: application/json" ^
+   -d @knz.json https://fcm.googleapis.com/fcm/send
+-->
