@@ -19,6 +19,11 @@ from tools import generate_detections as gdet
 from deep_sort.detection import Detection as ddet
 from collections import deque
 from keras import backend
+import firebase_admin
+import google.cloud
+from firebase_admin import credentials, firestore
+import datetime
+import pycurl, json, re
 
 backend.clear_session()
 ap = argparse.ArgumentParser()
@@ -33,6 +38,63 @@ warnings.filterwarnings('ignore')
 np.random.seed(100)
 COLORS = np.random.randint(0, 255, size=(200, 3),
 	dtype="uint8")
+dirlist=[]
+tokens=[]
+print("DIRlist created, token list created")
+print('inside token_count')
+cred = credentials.Certificate("./ServiceAccountKey.json")
+app = firebase_admin.initialize_app(cred)
+store = firestore.client()
+doc_ref = store.collection(u'testy')
+
+try:
+    docs = doc_ref.stream()
+    for doc in docs:
+        print(u'Doc Data:{}'.format(doc.to_dict()))
+        if doc.to_dict() not in tokens:
+            tokens.append(doc.to_dict())
+            print('*********tokens:{}*********'.format(tokens))
+
+except google.cloud.exceptions.NotFound:
+    print(u'Missing data')
+tokensnew='{}'.format(tokens)
+print(tokensnew)
+
+x=re.sub("token", "", tokensnew)
+x=re.sub("]", "", x)
+x=re.sub('\[', "", x)
+x=re.sub("'", "", x)
+x=re.sub("{", "", x)
+x=re.sub("}", "", x)
+x=re.sub(",", "", x)
+x=re.split(" ",x)
+x = list(filter(None, x))
+x=[tokeni for tokeni in x if tokeni!=':']
+print(x)
+
+
+def notify(class_name,trackid):
+    
+    now=datetime.datetime.now()
+    time=now.strftime("%H:%M")
+    print(time)
+    doc_ref = store.collection(u'objects')
+    doc_ref.add({u'name': u'testframe{clas},{id}.jpg'.format(clas=class_name,id=trackid), u'added': time})
+    for tokeni in x:
+        c = pycurl.Curl()
+        c.setopt(pycurl.URL, 'https://fcm.googleapis.com/fcm/send')
+        c.setopt(pycurl.HTTPHEADER, ['Content-Type: application/json','Authorization: key=AAAAP1gySWk:APA91bEJogPOykWMPEc4hoFer2QXo0uOijVODd2AHrb0qHsIWFRLAFGEDw-YZfEVi0oC9G_zh2j2dZ4RIvMyJi-cf3kvo2gZMRHN8PFvYDMwzAFVk4qlLmo5NyQNXhZNvzlqP7w6pG20'])
+        print('======================{}'.format(tokeni))
+        data = json.dumps({"notification":{"title":"GTFO","body":"frame{clas},{id}.jpg" .format(clas=class_name,id=trackid),"icon":"/itwonders-web-logo.png",}, "to":"{}".format(tokeni)})
+        c.setopt(pycurl.POST, 1)
+        c.setopt(pycurl.POSTFIELDS, data)
+        c.setopt(pycurl.VERBOSE, 1)
+        c.perform()
+        print(c.getinfo(pycurl.RESPONSE_CODE))
+        certinfo = c.getinfo(pycurl.INFO_CERTINFO)
+        print(certinfo)
+        c.close()
+    return
 
 def main(yolo):
 
@@ -114,7 +176,14 @@ def main(yolo):
                class_name = class_names[0]
                cv2.putText(frame, str(class_names[0]),(int(bbox[0]), int(bbox[1] -20)),0, 5e-3 * 100, (color),1)
             try:
-                cv2.imwrite("frame{clas},{id}.jpg" .format(clas=class_names[0],id=int(track.track_id)) , crop_img)
+                a="frame{clas},{id}.jpg" .format(clas=class_names[0],id=int(track.track_id))
+                cv2.imwrite(a , crop_img)
+                if a not in dirlist:
+                    dirlist.append(a)
+                    print(dirlist)
+                    print("calling curl function")
+                    notify(class_names[0],int(track.track_id))
+                
             except:
                 cv2.imwrite("frame{clas},{id}.jpg" .format(clas=class_names[0],id=int(track.track_id)) , frame)
             i += 1
@@ -178,3 +247,6 @@ def main(yolo):
 
 if __name__ == '__main__':
     main(YOLO())
+'''
+
+'''

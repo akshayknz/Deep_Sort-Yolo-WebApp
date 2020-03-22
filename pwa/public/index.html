@@ -126,7 +126,53 @@
 
 <!--
 
-  curl -X POST -H "Authorization: key=AAAAP1gySWk:APA91bEJogPOykWMPEc4hoFer2QXo0uOijVODd2AHrb0qHsIWFRLAFGEDw-YZfEVi0oC9G_zh2j2dZ4RIvMyJi-cf3kvo2gZMRHN8PFvYDMwzAFVk4qlLmo5NyQNXhZNvzlqP7w6pG20" ^
-   -H "Content-Type: application/json" ^
-   -d @knz.json https://fcm.googleapis.com/fcm/send
+  curl -X POST -H "" ^
+   -H "" ^
+   -d @notification.json 
+
+curl -v
+-H Accept:application/json \
+-H Content-Type:application/json \
+-d "{
+    name: 'abc',
+    path: 'def',
+    target: [ 'ghi' ]
+}" \
+-X POST http://some-url
+
+import pycurl, json
+c = pycurl.Curl()
+c.setopt(pycurl.URL, 'https://fcm.googleapis.com/fcm/send')
+c.setopt(pycurl.HTTPHEADER, ['Content-Type: application/json'])
+c.setopt(pycurl.HTTPHEADER, ['Authorization: key=AAAAP1gySWk:APA91bEJogPOykWMPEc4hoFer2QXo0uOijVODd2AHrb0qHsIWFRLAFGEDw-YZfEVi0oC9G_zh2j2dZ4RIvMyJi-cf3kvo2gZMRHN8PFvYDMwzAFVk4qlLmo5NyQNXhZNvzlqP7w6pG20'])
+data = json.dumps({"notification":{"title":"GTFO","body":"Knz Send you a message","icon":"/itwonders-web-logo.png",},"to":"d9rHq65Bx1A:APA91bGfU0yVLT_JSlSQAf-WfNBXiES7WuYKeW4z14WgC1m7q8NVBhUiOlt4HTOFQHQG05AYEUjwAnIgTgGOESV25V_DTYDss4pK23GD1gHN55lq8Pdnl8kKKgDT7YOkMI9VrRikos3P"})
+c.setopt(pycurl.POST, 1)
+c.setopt(pycurl.POSTFIELDS, data)
+c.setopt(pycurl.VERBOSE, 1)
+c.perform()
+print curl_agent.getinfo(pycurl.RESPONSE_CODE)
+c.close()
+
+   or
+
+   curl -X POST -H "Authorization: Bearer ya29.ElqKBGN2Ri_Uz...PbJ_uNasm" -H "Content-Type: application/json" -d '{
+  "message": {
+    "notification": {
+      "title": "FCM Message",
+      "body": "This is a message from FCM"
+    },
+    "webpush": {
+      "headers": {
+        "Urgency": "high"
+      },
+      "notification": {
+        "body": "This is a message from FCM to web",
+        "requireInteraction": "true",
+        "badge": "/badge-icon.png"
+      }
+    }
+  },
+  "token": "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1..."
+  }
+}' "https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send"
 -->
