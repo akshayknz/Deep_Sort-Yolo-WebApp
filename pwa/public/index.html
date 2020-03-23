@@ -83,7 +83,7 @@
                 return messaging.getToken()
             })
             .then(function(token) {
-                TokenElem.innerHTML = "token is : " + token
+                TokenElem.innerHTML = "Token: " + token
                 db.collection("testy").add({
                       token: token
                   }).then(function(docRef) {
