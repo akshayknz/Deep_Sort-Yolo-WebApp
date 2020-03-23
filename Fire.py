@@ -54,8 +54,7 @@ for i in x:
 
 
 '''
-doc_ref = store.collection(u'testy')
-doc_ref.add({u'name': u'test', u'added': time})
+
 '''
 '''
 import subprocess

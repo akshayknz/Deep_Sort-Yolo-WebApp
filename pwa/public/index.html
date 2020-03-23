@@ -16,9 +16,12 @@
 <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-firestore.js"></script>
-    
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css?family=Dosis|Inconsolata|Open+Sans+Condensed:300|Oswald:300|Teko:300&display=swap" rel="stylesheet">
 <script>
+  
 // Required for side-effects
   // Your web app's Firebase configuration
   var Config = {
@@ -38,11 +41,14 @@
 
 </script>
 <style>
-  body{background-color: red;}
+
+  body,button{background-color: #000;font-family: 'Inconsolata', sans-serif;font-weight: 100;font-size: 20px;color:lime;}
+  .head{font-size: 60px;font-family: 'Teko', sans-serif;}
 </style>
 <body>
-    <div id="token"></div>
+  <div class='head'>Deep Learning Security Portal</div>
     <div id="msg"></div>
+    <div id="token"></div>
     <div id="notis"></div>
     <div id="err"><script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
     <script>
@@ -98,6 +104,40 @@
         });
 
     </script>
+
+
+
+<div id="accordion"></div>
+
+<script>
+db.collection('objects').get().then((s) => {
+   $("#station").html(""); // This will empty your station button
+   $("#station_box").html(""); // This will empty your station box   + x.id + x.data().name + ---...below..
+   var n = 0;
+   s.forEach(function(x){
+      $("#accordion").append(`
+<div class="card">
+  <div class="card-header" id="heading`+ n +`">
+      <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapse`+ n+`">`+ x.data().name +`</button> 
+      </h5>
+   </div>
+
+   <div id="collapse`+ n +`" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+         <p>`+ x.data().added +`</p>
+      </div>
+   </div>
+</div>
+`);
+
+      n += 1;
+   });
+});
+</script>
+<div id='station'>Loading DB</div>
+<div id='station_box'>Loading Objects</div>
+
 <script type="text/javascript">
     // If service worker is supported, then register it.
     if ('serviceWorker'in navigator) {
