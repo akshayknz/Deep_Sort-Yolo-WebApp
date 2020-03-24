@@ -4,6 +4,7 @@
 <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-storage.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -24,9 +25,21 @@
   var token= 3
   firebase.initializeApp(Config);
  var db = firebase.firestore();
-
+//var storage = firebase.storage();
+//var storageRef = storage.ref();
+////urll is the url for image
+//storageRef.child('yoo').getDownloadURL().then(function(url) {
+//  // Or inserted into an <img> element:
+//  var test = url;
+//  alert(url);
+//  //document.getElementById("imgid").src = test;
+//  document.getElementById("yooo").innerHTML += '<img id="u23_img" class="imgs" src="'+test+'">';
+//}).catch(function(error) {
+//  // Handle any errors
+//});
 </script> 
 <style>
+  *{transition: all .3s;}
 body{margin: 0; padding:0;   width: 100vw;background: linear-gradient(to bottom right, #050027 10%,#000000 90%);overflow-x: hidden;}
 .main{padding: 0px 6vw;}
 .contain{margin-bottom: 8px;
@@ -35,20 +48,29 @@ body{margin: 0; padding:0;   width: 100vw;background: linear-gradient(to bottom 
     padding: 3px 7px;}
 .block{display: block;}
 .inline_block{display: inline-block;}
+.imgs{width: 100px;display: inline-block;
+    box-shadow: 0px 0px 0px 1px #ffffff3d;
+    padding: 3px 7px;}
 #token{
     display: inline;
     word-break: break-all;}
 body,button{font-family: 'Inconsolata', sans-serif;font-weight: 100;font-size: 16px;color:lime;}
 .head{font-size: 50px;font-family: 'Teko', sans-serif;}
-
+.card.contain.small {
+    font-size: 10px;    width: 170px;
+    overflow: hidden;
+}
+.btn{text-align: left;}
+.small button.btn.btn-link {
+    font-size: 10px;    word-break: break-all;
+}
 </style>
 <body>
   <div class='main'>
   <div class='head'>Deep Learning Security Portal </div>
     <div class='block contain'><div class='messages' id="msg"></div></div>
     <div class='block contain'><div class='messages' id="token"></div></div>
-    <div class='block contain'><div class='messages' id="alerts"></div></div><div class='block contain'><div class='messages' id="notis"></div></div>
-    
+    <div class='block contain'><div class='messages' id="alerts"></div></div><div class='block contain'><div class='messages' id="notis"></div></div>    <div src="test" id='yooo'></div>
     <div class='block contain'><div class='messages' id="err"><script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script></div>
     <script>
 
@@ -112,8 +134,10 @@ body,button{font-family: 'Inconsolata', sans-serif;font-weight: 100;font-size: 1
     </script>
 
 
-
+Objects under vision
 <div id="accordion"></div>
+Devices under notice
+<div id="accordion2"></div>
 
 <script>
 db.collection('objects').get().then((s) => {
@@ -146,8 +170,8 @@ db.collection('testy').get().then((s) => {
    $("#station_box").html(""); // This will empty your station box   + x.id + x.data().name + ---...below..
    var n = 0;
    s.forEach(function(x){
-      $("#accordion").append(`
-<div class="card contain">
+      $("#accordion2").append(`
+<div class="card contain small">
   <div class="card-header" id="heading`+ n +`">
       <h5 class="mb-0">
           <button class="btn btn-link" data-toggle="collapse" data-target="#collapse`+ n+`">`+ x.data().token +`</button> 

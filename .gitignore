@@ -1,3 +1,4 @@
 *.log
 ServiceAccountKey.json
+cred.json
 /model_data/*
